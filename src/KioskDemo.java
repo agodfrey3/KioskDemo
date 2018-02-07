@@ -1,22 +1,17 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextArea;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import java.awt.Font;
 
 public class KioskDemo extends JFrame
 {
     private static final long serialVersionUID = 1L;
-    double total = 0.0;
+    private double total = 0.0;
+    private DecimalFormat df = new DecimalFormat("##.00");
 
     /**
      * Launch the application.
@@ -30,22 +25,22 @@ public class KioskDemo extends JFrame
     /**
      * Create the frame.
      */
-    public KioskDemo()
+    private KioskDemo()
     {
         // Frame title
         setTitle("--- Food Truck Kiosk ---");
 
         NumberFormat formatter = new DecimalFormat("#0.00");
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // size of the frame
-        setSize(975,800);
+        setSize(1200,800);
 
         // panel title
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new TitledBorder(new EtchedBorder(),
-                "Display Area - Food Truck #1"));;
+                "Display Area - Food Truck #1"));
         setContentPane(contentPane);
 
 
@@ -123,13 +118,41 @@ public class KioskDemo extends JFrame
         btnNewButton_4.setBounds(272, 329, 187, 243);
         contentPane.add(btnNewButton_4);
 
+        // Grape Button
+        JButton btnNewButton_5 = new JButton("Banana");
+        btnNewButton_5.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textArea.append("Banana           .99\r\n");
+                total = total + .99;
+
+                textField.setText(formatter.format(total));
+                textArea.repaint();
+            }
+        });
+        btnNewButton_5.setIcon(new ImageIcon("Kiosk-Banana.jpg"));
+        btnNewButton_5.setBounds(490, 41, 187, 243);
+        contentPane.add(btnNewButton_5);
+
+        // Grape Button
+        JButton btnNewButton_6 = new JButton("Blueberries");
+        btnNewButton_6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textArea.append("Blueberries     1.89\r\n");
+                total = total + 1.89;
+
+                textField.setText(formatter.format(total));
+                textArea.repaint();
+            }
+        });
+        btnNewButton_6.setIcon(new ImageIcon("Kiosk-Blueberries.jpg"));
+        btnNewButton_6.setBounds(490, 329, 187, 243);
+        contentPane.add(btnNewButton_6);
+
 
         JLabel lblNewLabel = new JLabel("    Total Price   $");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
         lblNewLabel.setBounds(697, 424, 100, 23);
         contentPane.add(lblNewLabel);
-
-
 
         // EXIT Button
         JButton btnNewButton_3 = new JButton("EXIT");
@@ -160,6 +183,47 @@ public class KioskDemo extends JFrame
         lblNewLabel_4.setBounds(272, 583, 187, 14);
         contentPane.add(lblNewLabel_4);
 
+        JLabel lblNewLabel_5 = new JLabel("Click for Bananas : .99 each");
+        lblNewLabel_5.setBounds(490, 295, 187, 14);
+        contentPane.add(lblNewLabel_5);
+
+        JLabel lblNewLabel_6 = new JLabel("Click for Blueberries : 1.89 each");
+        lblNewLabel_6.setBounds(490, 583, 187, 14);
+        contentPane.add(lblNewLabel_6);
+
+        JLabel cashTenderedLabel = new JLabel("Cash Tendered");
+        cashTenderedLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        cashTenderedLabel.setBounds(697, 475, 150, 14);
+        contentPane.add(cashTenderedLabel);
+
+        JTextArea cashTenderedTextField = new JTextArea();
+        cashTenderedTextField.setBounds(808, 475, 120, 20);
+        cashTenderedTextField.setEditable(true);
+        contentPane.add(cashTenderedTextField);
+
+        JLabel transactionCompleteLabel = new JLabel();
+        transactionCompleteLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        transactionCompleteLabel.setBounds(714, 575, 500, 30);
+        contentPane.add(transactionCompleteLabel);
+
+        JButton transactionButton = new JButton("Transaction Complete");
+        transactionButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        transactionButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                double cashTendered = Double.parseDouble(cashTenderedTextField.getText());
+                double changeDue = cashTendered - total;
+                if (changeDue >= 0) {
+                    transactionCompleteLabel.setText(String.format("Transaction Complete! Your change is: $" +
+                                                                   changeDue));
+                } else {
+                    double absChange = Math.abs(changeDue);
+                    transactionCompleteLabel.setText(String.format("Transaction Stopped. You still owe: $" +
+                                                                   absChange));
+                }
+            }
+        });
+        transactionButton.setBounds(714, 510, 200, 34);
+        contentPane.add(transactionButton);
 
         // user will do the layout
         contentPane.setLayout(null);
