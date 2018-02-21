@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
+import java.net.InetAddress;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.awt.event.ActionEvent;
@@ -219,6 +220,15 @@ public class KioskDemo extends JFrame
                     double absChange = Math.abs(changeDue);
                     transactionCompleteLabel.setText(String.format("Transaction Stopped. You still owe: $" +
                                                                    df.format(absChange)));
+                }
+
+                try {
+                    String receipt = "Cash value sold: " + df.format(total);
+                    InetAddress ip = InetAddress.getByName("127.0.0.1");
+                    Client client = new Client(ip, 3333, receipt);
+                    client.run();
+                } catch (Exception ex){
+                    ex.printStackTrace();
                 }
             }
         });
