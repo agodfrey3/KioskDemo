@@ -214,11 +214,11 @@ public class KioskDemo extends JFrame
                 double changeDue = cashTendered - total;
                 if (changeDue >= 0) {
                     transactionCompleteLabel.setText(String.format("Transaction Complete! Your change is: $" +
-                                                                   changeDue));
+                                                                   df.format(changeDue)));
                 } else {
                     double absChange = Math.abs(changeDue);
                     transactionCompleteLabel.setText(String.format("Transaction Stopped. You still owe: $" +
-                                                                   absChange));
+                                                                   df.format(absChange)));
                 }
             }
         });
